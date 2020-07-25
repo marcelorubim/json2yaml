@@ -64,17 +64,20 @@ export function stringify(data: any, maxText: number = 120) {
             return output;
         },
         "object": function(x, inArray, rootNode) {
-            var output = '';
+            let output = '';
 
             if(x === null) {
                 return "null"
             }
 
+            if(Array.isArray(x)){
+                return handlers["array"](x)
+            }
+            
             if (0 === Object.keys(x).length) {
                 output += '{}';
                 return output;
             }
-
             if (!rootNode) {
                 indentLevel = indentLevel.replace(/$/, '  ');
             }

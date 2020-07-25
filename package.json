@@ -1,6 +1,6 @@
 {
   "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com)",
-  "name": "json2yaml",
+  "name": "@marcelorubim/json2yaml",
   "description": "A forked version from commandline utility to convert JSON to YAML / YML by AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "cli",
     "util"
   ],
-  "version": "1.1.0",
+  "version": "1.2.0-rc.2",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
