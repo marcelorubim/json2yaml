@@ -1,11 +1,14 @@
 import trimWhitespace from 'remove-trailing-spaces';
-var typeOf = require('remedial').typeOf;
-var maxText = 120;
-var wrap = require('wordwrap')(maxText);
-export function stringify(data) {
-    var handlers, indentLevel = '';
+import wordwrap from 'wordwrap';
 
-    handlers = {
+export interface Handlers {
+    [key: string]: (value?:any, inArray?: boolean, rootNode?: boolean) => string | number | boolean;
+}
+
+export function stringify(data: any, maxText: number = 120) {
+    const wrap = wordwrap(maxText);
+    let indentLevel = '';
+    const handlers: Handlers = {
         "undefined": function() {
             // objects will not have `undefined` converted to `null`
             // as this may have unintended consequences
@@ -15,20 +18,20 @@ export function stringify(data) {
         "null": function() {
             return 'null';
         },
-        "number": function(x) {
+        "number": function(x: number) {
             return x;
         },
-        "boolean": function(x) {
-            return x ? 'true' : 'false';
+        "boolean": function(x: boolean) {
+            return x ? true : false;
         },
-        "string": function(x) {
+        "string": function(x: string) {
           var output = '|';
           if (x.length <= maxText && x.indexOf('\n') === -1) {
             return JSON.stringify(x);
           }
           var text = wrap(x).split(/\\n|\n/);
           indentLevel = indentLevel.replace(/$/, '  ');
-          text.forEach(function (y) {
+          text.forEach((y: string) => {
             output += '\n' + indentLevel + y;
   
           });
@@ -36,7 +39,7 @@ export function stringify(data) {
   
           return output;
         },
-        "array": function(x) {
+        "array": function(x: any[]) {
             var output = '';
 
             if (0 === x.length) {
@@ -47,10 +50,10 @@ export function stringify(data) {
             indentLevel = indentLevel.replace(/$/, '  ');
             x.forEach(function(y, i) {
                 // TODO how should `undefined` be handled?
-                var handler = handlers[typeOf(y)];
+                var handler = handlers[typeof y];
 
                 if (!handler) {
-                    throw new Error('what the crap: ' + typeOf(y));
+                    throw new Error('what the crap: ' + typeof y);
                 }
 
                 output += '\n' + indentLevel + '- ' + handler(y, true);
@@ -74,7 +77,7 @@ export function stringify(data) {
 
             Object.keys(x).forEach(function(k, i) {
                 var val = x[k],
-                    handler = handlers[typeOf(val)];
+                    handler = handlers[typeof val];
 
                 if ('undefined' === typeof val) {
                     // the user should do
@@ -86,7 +89,7 @@ export function stringify(data) {
                 }
 
                 if (!handler) {
-                    throw new Error('what the crap: ' + typeOf(val));
+                    throw new Error('what the crap: ' + typeof val);
                 }
 
                 if (!(inArray && i === 0)) {
@@ -105,5 +108,5 @@ export function stringify(data) {
         }
     };
 
-    return trimWhitespace(handlers[typeOf(data)](data, true, true) + '\n');
+    return trimWhitespace(handlers[typeof data](data, true, true) + '\n');
 }
