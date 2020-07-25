@@ -40,5 +40,8 @@
   "devDependencies": {
     "typescript": "^3.9.7"
   },
+  "files": [
+    "dist/"
+  ],
   "preferGlobal": true
 }
