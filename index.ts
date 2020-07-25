@@ -25,11 +25,11 @@ export function stringify(data: any, maxText: number = 120) {
             return x ? true : false;
         },
         "string": function(x: string) {
-          var output = '|';
+          let output = '|';
           if (x.length <= maxText && x.indexOf('\n') === -1) {
             return JSON.stringify(x);
           }
-          var text = wrap(x).split(/\\n|\n/);
+          const text = wrap(x).split(/\\n|\n/);
           indentLevel = indentLevel.replace(/$/, '  ');
           text.forEach((y: string) => {
             output += '\n' + indentLevel + y;
@@ -40,7 +40,7 @@ export function stringify(data: any, maxText: number = 120) {
           return output;
         },
         "array": function(x: any[]) {
-            var output = '';
+            let output = '';
 
             if (0 === x.length) {
                 output += '[]';
@@ -50,7 +50,7 @@ export function stringify(data: any, maxText: number = 120) {
             indentLevel = indentLevel.replace(/$/, '  ');
             x.forEach(function(y, i) {
                 // TODO how should `undefined` be handled?
-                var handler = handlers[typeof y];
+                let handler = handlers[typeof y];
 
                 if (!handler) {
                     throw new Error('what the crap: ' + typeof y);
@@ -66,6 +66,10 @@ export function stringify(data: any, maxText: number = 120) {
         "object": function(x, inArray, rootNode) {
             var output = '';
 
+            if(x === null) {
+                return "null"
+            }
+
             if (0 === Object.keys(x).length) {
                 output += '{}';
                 return output;
@@ -76,8 +80,8 @@ export function stringify(data: any, maxText: number = 120) {
             }
 
             Object.keys(x).forEach(function(k, i) {
-                var val = x[k],
-                    handler = handlers[typeof val];
+                const val = x[k];
+                const handler = handlers[typeof val];
 
                 if ('undefined' === typeof val) {
                     // the user should do

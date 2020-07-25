@@ -18,17 +18,23 @@
     "url": "https://github.com/marcelorubim/json2yaml"
   },
   "bin": {
-    "json2yaml": "./cli.js",
-    "jsontoyaml": "./cli.js",
-    "jsontoyml": "./cli.js",
-    "json2yml": "./cli.js"
+    "json2yaml": "./dist/cli.js",
+    "jsontoyaml": "./dist/cli.js",
+    "jsontoyml": "./dist/cli.js",
+    "json2yml": "./dist/cli.js"
   },
   "engines": {
     "node": ">= 0.2.0"
   },
-  "test": "echo 'error no test'; exit 1",
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "tsc",
+    "test": "echo 'error no test'; exit 1"
+  },
   "dependencies": {
+    "@types/node": "^14.0.26",
     "@types/wordwrap": "^1.0.0",
+    "remove-trailing-spaces": "^1.0.7",
     "wordwrap": "^1.0.0"
   },
   "devDependencies": {

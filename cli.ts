@@ -1,11 +1,13 @@
 #!/usr/bin/env node
+import fs from "fs"
+import * as YAML from "./index"
+
+export type CallBackFunction = (err: Error |  null, text: string) => void
+
 (function () {
   "use strict";
 
-  var fs = require('fs')
-    , filename = process.argv[2]
-    , YAML = require('./index')
-    ;
+  const filename = process.argv[2];
 
   /*
    *
@@ -19,7 +21,7 @@
     console.warn("cat example.json | json2yaml");
   }
 
-  function handleInput(err, text) {
+  function handleInput(err: Error | null, text: string) {
     var data
       ;
 
@@ -29,7 +31,7 @@
     }
 
     data = JSON.parse(text);
-    console.info(YAML.stringify(data, null, '  '));
+    console.info(YAML.stringify(data));
   }
 
   /*
@@ -43,7 +45,7 @@
   //
   // this could (and probably should) be its own module
   //
-  function readInput(cb, filename) {
+  function readInput(cb: CallBackFunction, filename: string) {
 
     function readFile() {
       fs.readFile(filename, 'utf8', function (err, text) {
